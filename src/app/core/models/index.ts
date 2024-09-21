@@ -1,0 +1,1 @@
+export { CreditScoreResponse } from './CreditScoreResponse';
