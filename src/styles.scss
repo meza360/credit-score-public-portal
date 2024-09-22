@@ -1,1 +1,148 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@include mat.core();
+
+$credit-score-portal-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$cyan-palette
+  ),
+  typography: (
+    brand-family: 'Roboto',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
+
+html, body { 
+    height: 100%;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.dark-theme{
+    background-color: #242c2c;
+    @include mat.all-component-themes($credit-score-portal-theme); 
+    @include mat.button-theme($credit-score-portal-theme);
+    @include mat.input-theme($credit-score-portal-theme);
+    @include mat.checkbox-theme($credit-score-portal-theme);
+    @include mat.select-theme($credit-score-portal-theme);
+    @include mat.slider-theme($credit-score-portal-theme);
+    @include mat.progress-spinner-theme($credit-score-portal-theme);
+    @include mat.progress-bar-theme($credit-score-portal-theme);
+    @include mat.tabs-theme($credit-score-portal-theme);
+    @include mat.card-theme($credit-score-portal-theme);
+    @include mat.dialog-theme($credit-score-portal-theme);
+    @include mat.snack-bar-theme($credit-score-portal-theme);
+    @include mat.tooltip-theme($credit-score-portal-theme);
+    @include mat.form-field-theme($credit-score-portal-theme);
+    @include mat.icon-theme($credit-score-portal-theme);
+    @include mat.menu-theme($credit-score-portal-theme);
+    @include mat.list-theme($credit-score-portal-theme);
+    @include mat.sidenav-theme($credit-score-portal-theme);
+    @include mat.toolbar-theme($credit-score-portal-theme);
+    @include mat.table-theme($credit-score-portal-theme);
+    @include mat.grid-list-theme($credit-score-portal-theme);
+    //@include mat.hint-theme($credit-score-portal-theme);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+.space-around{
+    justify-content: space-around;
+}
+.space-evenly{
+    justify-content: space-evenly;
+}
+
+.align-center{
+    align-items: center;
+}
+
+.align-end{
+    align-items: flex-end;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.col{
+    display: flex;
+    flex-direction: column;
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+.text-white{
+    color: #FFFFFF;
+}
+
+.full-width{
+    width: 100%;
+}
+
+.full-height{
+    height: 100%;
+}
+
+.fs-2{
+    font-size: 24px;
+} 
+.fs-3{
+    font-size: 20px;
+}
+.fs-4{
+    font-size: 16px;
+}
+
+.fw-bold{
+    font-weight: 600;
+}
+
+.fw-light{
+    font-weight: 400;
+}
+
+.py-3{
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+}
+.py-5{
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+}
+.py-0{
+    padding-top: 0;
+    padding-bottom: 0;
+} 
+.my-0{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.px-2{
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.mx-2{
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+}
+
+.word-wrap{
+    word-wrap:normal;
+}
+.width-50{
+    width: 50%;
+}

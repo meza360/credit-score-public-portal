@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContributorService } from './core/services/contributor.service';
+
 
 @Component({
   selector: 'app-root',
@@ -7,19 +7,9 @@ import { ContributorService } from './core/services/contributor.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  constructor (private contributorService: ContributorService) {
+
+  constructor () {
+
   }
 
-  retrieveScore(): void {
-    this.contributorService.queryContributorReport()
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
-  }
-  title = 'credit-score-public-portal';
 }

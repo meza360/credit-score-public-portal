@@ -1,0 +1,35 @@
+<div></div>
+<div></div>
+<div class="dark-theme full-width">
+    <button mat-raised-button (click)='retrieveScore()'>Retrieve score</button>
+    <section>
+        <form [formGroup]="filterForm" class="row space-around align-center">
+            <span class="col">
+                <mat-form-field class='full-width'>
+                    <mat-label>Fecha inicial</mat-label>
+                    <input matInput [matDatepicker]='picker1' formControlName='startDate' placeholder='YYYY/MM/dd'
+                           [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
+                           (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'>
+                    <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]='picker1'></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </span>
+            <span class="col">
+                <mat-form-field class='full-width'>
+                    <mat-label>Fecha Final</mat-label>
+                    <input matInput [matDatepicker]='picker2' formControlName='endDate' placeholder='YYYY/MM/dd'
+                           [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
+                           (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'>
+                    <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]='picker2'></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </span>
+            <span class="col">
+                <button mat-raised-button (click)='filterData()'>Filtrar</button>
+            </span>
+        </form>
+    </section>
+    <canvas id='myChart' #myChart></canvas>
+</div>
