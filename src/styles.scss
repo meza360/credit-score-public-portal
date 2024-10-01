@@ -20,10 +20,16 @@ html, body {
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.dark-theme{
+.dark-theme {
     background-color: #242c2c;
+    color: #FFFFFF;
+}
+
+html {
+
     @include mat.all-component-themes($credit-score-portal-theme); 
     @include mat.button-theme($credit-score-portal-theme);
+    @include mat.button-toggle-theme($credit-score-portal-theme);
     @include mat.input-theme($credit-score-portal-theme);
     @include mat.checkbox-theme($credit-score-portal-theme);
     @include mat.select-theme($credit-score-portal-theme);
@@ -43,6 +49,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     @include mat.toolbar-theme($credit-score-portal-theme);
     @include mat.table-theme($credit-score-portal-theme);
     @include mat.grid-list-theme($credit-score-portal-theme);
+    @include mat.datepicker-theme($credit-score-portal-theme);
+    @include mat.option-theme($credit-score-portal-theme);
+    @include mat.dialog-theme($credit-score-portal-theme);
+    @include mat.badge-theme($credit-score-portal-theme);
+    @include mat.tabs-theme($credit-score-portal-theme);
+
     //@include mat.hint-theme($credit-score-portal-theme);
 }
 
@@ -129,15 +141,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-top: 0;
     margin-bottom: 0;
 }
+.my-5{
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
 
 .px-2{
     padding-left: 1.5em;
     padding-right: 1.5em;
 }
+.px-5{
+    padding-left: 2em;
+    padding-right: 2em;
+}
 
 .mx-2{
     margin-left: 1.5em;
     margin-right: 1.5em;
+}
+.mx-5{
+    margin-left: 2em;
+    margin-right: 2em;
 }
 
 .word-wrap{

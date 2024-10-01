@@ -1,17 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CategoryScale, Chart, LinearScale, LineController, LineElement, PointElement } from 'chart.js';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { CategoryScale, Chart, LinearScale, LineController, LineElement, PointElement, Filler, LegendElement, Legend, ChartData, ChartType, DoughnutController, DoughnutControllerChartOptions, ArcElement } from 'chart.js';
 import { ContributorDto } from '../../core/models';
 import { ContributorService } from '../../core/services/contributor.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UtilService } from '../../core/services/util.service';
 
 @Component({
   selector: 'app-score-report',
   templateUrl: './score-report.component.html',
   styleUrl: './score-report.component.scss'
 })
-export class ScoreReportComponent {
+export class ScoreReportComponent implements AfterViewInit {
   filterForm: FormGroup<{
     startDate: FormControl<Date | null>,
     endDate: FormControl<Date | null>,
@@ -20,51 +21,165 @@ export class ScoreReportComponent {
     endDate: new FormControl<Date | null>(null)
   });
   handleFindAvailableDates(event: MatDatepickerInputEvent<Date> | Event | KeyboardEvent) {
-    throw new Error('Method not implemented.');
+    if (event instanceof Event || event instanceof KeyboardEvent) {
+      //this.smsCampaignForm.controls.campaignInformation.controls.campaignDate.setValue(null);
+      //this.datesSelector.next([]);
+    }
+    if (event instanceof MatDatepickerInputEvent) {
+      //this.utilService.findAvailableDates(event, this.unavailableDates, this.availableSchedules.map((n) => n), this.datesSelector);
+    }
   }
-  @ViewChild('myChart') chart!: ElementRef;
+  @ViewChild('expensesChart') expensesChartElementRef!: ElementRef;
+  @ViewChild('debtChart') debtChartElementRef!: ElementRef;
   minDate: Date | string = new Date();
   maxDate: Date | string = new Date();
   contributor: ContributorDto | null = null;
-  impositionsChart: Chart | null = null;
-  constructor (private contributorService: ContributorService, private formBuilder: FormBuilder) {
-    Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement);
+  expensesChart: Chart | null = null;
+  debtChart: Chart | null = null;
+  constructor (
+    private contributorService: ContributorService,
+    private formBuilder: FormBuilder,
+    private utilService: UtilService) {
+
+    Chart.register(LineController, DoughnutController, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Legend, Filler);
+
+  }
+  ngAfterViewInit(): void {
+    this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Facturacion mensual(compras)',
+            data: []
+          },
+          {
+            label: 'Declaraciones mensuales(ventas)',
+            data: []
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              //color: 'rgb(218, 60, 58)'
+            }
+          }
+        }
+      }
+    });
+
+    let datas: ChartData<'doughnut'> = {
+      labels: [
+        'Red',
+        'Blue',
+        'Yellow'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [300, 50, 100],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
+      }]
+    },
+      options: {
+        cutout: '80%',
+        radius: '100%',
+        rotation: 0,
+        circumference: 360,
+        doughnut: {
+
+        };
+      };
+    this.debtChart = new Chart(this.debtChartElementRef.nativeElement, {
+      type: 'doughnut',
+      data: datas
+    });
+
+
   }
 
 
   retrieveScore(): void {
-    console.log(this.chart);
+    console.log(this.expensesChartElementRef);
+    let data: ChartData<'line'> | null = null;
     this.contributorService.queryContributorReport()
       .subscribe({
         next: (response) => {
           console.log(<ContributorDto>response.value);
           this.contributor = <ContributorDto>response.value;
-          const data = {
+          data = {
             labels: this.contributor.impositionHistoricalRecord
               .map((imposition) => {
                 return new Date(imposition.year, imposition.month).toISOString().split("T")[0];
               }),
             datasets: [
               {
-                label: 'Facturacion mensual',
+                label: 'Facturacion mensual(compras)',
                 data: this.contributor.impositionHistoricalRecord
                   .map((imposition) => {
                     return imposition.paymentAmount;
                   }),
-                fill: false,
+                fill: {
+                  target: 'origin',
+                  above: 'rgb(75,192,192,0.25)',   // Area will be blue above the origin
+                  below: 'rgb(75, 192, 192)'    // And blue below the origin
+                },
                 borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+              },
+              {
+                label: 'Declaraciones mensuales(ventas)',
+                data: this.contributor.statementHistoricalRecord
+                  .map((statement) => {
+                    return statement.statementAmount;
+                  }),
+                fill: {
+                  target: 'origin',
+                  above: 'rgb(218, 60, 58,0.25)',   // Area will be blue above the origin
+                  below: 'rgb(75, 192, 192)'    // And blue below the origin
+                },
+                borderColor: 'rgb(218, 60, 58)',
                 tension: 0.1
               }
             ]
           };
-
-          this.impositionsChart = new Chart(this.chart.nativeElement, {
-            type: 'line',
-            data: data
-          });
         },
-        error: (error: HttpErrorResponse) => {
+        error: (error: HttpErrorResponse): void => {
           console.error(error);
+        },
+        complete: (): void => {
+          this.expensesChart?.destroy();
+          this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
+            type: 'line',
+            data: <ChartData>data,
+            options: {
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    //color: 'rgb(218, 60, 58)'
+                  }
+                }
+              }
+            }
+          });
+          //Se limitan las fechas que se pueden seleccionar, desde el día actual
+          const minYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[0].year, 1, 1).getFullYear();
+          const minMonth: number = new Date(<Date>this.contributor?.impositionHistoricalRecord[0].paymentDate).getMonth();
+          const currentDay: number = new Date().getDate();
+          const maxYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[this.contributor?.impositionHistoricalRecord.length - 1].year, 1, 1).getFullYear();
+          //La fecha minima, es un dia despues del día actual
+          this.minDate = new Date(minYear, minMonth);
+          //La fecha maximas, es 6 meses despues del día actual
+          this.maxDate = new Date(maxYear, 1, 1);
         }
       });
   }
@@ -73,7 +188,7 @@ export class ScoreReportComponent {
     const startDate = this.filterForm.get('startDate')?.value;
     const endDate = this.filterForm.get('endDate')?.value;
     if (startDate && endDate && this.contributor) {
-      this.impositionsChart?.destroy();
+      this.expensesChart?.destroy();
       const data = {
         labels: this.contributor.impositionHistoricalRecord
           .map((imposition) => {
@@ -93,9 +208,19 @@ export class ScoreReportComponent {
         ]
       };
 
-      this.impositionsChart = new Chart(this.chart.nativeElement, {
+      this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
         type: 'line',
-        data: data
+        data: data,
+        options: {
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                color: 'rgb(255, 99, 132)'
+              }
+            }
+          }
+        }
       });
 
     }

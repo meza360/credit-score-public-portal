@@ -22,4 +22,5 @@ export interface StatementDto {
     year: number;
     wasDue: boolean;
     daysOverdue: number;
+    statementAmount: number;
 }

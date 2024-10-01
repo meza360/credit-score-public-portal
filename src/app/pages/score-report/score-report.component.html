@@ -1,35 +1,85 @@
-<div></div>
-<div></div>
-<div class="dark-theme full-width">
-    <button mat-raised-button (click)='retrieveScore()'>Retrieve score</button>
-    <section>
-        <form [formGroup]="filterForm" class="row space-around align-center">
-            <span class="col">
-                <mat-form-field class='full-width'>
-                    <mat-label>Fecha inicial</mat-label>
-                    <input matInput [matDatepicker]='picker1' formControlName='startDate' placeholder='YYYY/MM/dd'
-                           [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
-                           (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'>
-                    <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]='picker1'></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
-            </span>
-            <span class="col">
-                <mat-form-field class='full-width'>
-                    <mat-label>Fecha Final</mat-label>
-                    <input matInput [matDatepicker]='picker2' formControlName='endDate' placeholder='YYYY/MM/dd'
-                           [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
-                           (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'>
-                    <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]='picker2'></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                </mat-form-field>
-            </span>
-            <span class="col">
-                <button mat-raised-button (click)='filterData()'>Filtrar</button>
-            </span>
-        </form>
-    </section>
-    <canvas id='myChart' #myChart></canvas>
+<div class="container px-5 dark-theme">
+    <div class="">
+        <!-- First row -->
+        <div class="row full-width space-around dark-theme">
+            <div class=" col space-around justify-start full-width">
+                <span class="row justify-center">Datos del consultado </span>
+                <span>
+                    <p>Nombre: Giovani David Meza Poggio</p>
+                    <p>CUI: 3342 22123 0101</p>
+                    <p>Edad: 24 años</p>
+                    <p>Ocupacion: Estudiante</p>
+                    <p>Nacionalidad: Guatemalteco/Extranjero</p>
+                    <p>Estado civil: soltero</p>
+                </span>
+            </div>
+            <div class="col space-around justify-start full-width">
+                <span class="row justify-center">Guia de calificacion economica</span>
+                <span>
+                    <p>A: Menos de 1 mes de mora o al dia - riesgo normal</p>
+                    <p>B: entre 30 y 60 dias de mora - riesgo superior al normal</p>
+                    <p>C: entre 60 y 120 dias de mora - riesgo de perdidas</p>
+                    <p>D: entre 120 y 180 dias de mora - riesgo de perdidas significativas</p>
+                    <p>E: mas de 180 dias de mora - incobrable</p>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Second row -->
+    <div>
+        <div class="row">
+            <div class="col">Calificacion de prestacion de servicios: A Tipo de incumplimiento: lorem</div>
+            <div class="col">Calificacion de prestamos/creditos bancarios: A Tipo de incumplimiento: lorem</div>
+        </div>
+    </div>
+    <!-- Thrid row compras y declaraciones-->
+    <div class="dark-theme full-width">
+        <div class="col full-width">
+            <h2 class="row justify-center">Flujo de dinero en escala de tiempo</h2>
+            <section class="row full-width space-around">
+                <form [formGroup]="filterForm" class="row space-around align-center dark-theme full-width">
+                    <span class="col">
+                        <button mat-raised-button (click)='retrieveScore()'>Retrieve score</button>
+                    </span>
+                    <span class="col">
+                        <mat-form-field class='full-width dark-theme'>
+                            <mat-label class="dark-theme">Fecha inicial</mat-label>
+                            <input matInput [matDatepicker]='picker1' formControlName='startDate'
+                                   placeholder='YYYY/MM/dd' [min]='minDate' [max]='maxDate'
+                                   (dateChange)='handleFindAvailableDates($event)'
+                                   (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'
+                                   class="dark-theme">
+                            <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]='picker1' class="dark-theme"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1 class="dark-theme"></mat-datepicker>
+                        </mat-form-field>
+                    </span>
+                    <span class="col">
+                        <mat-form-field class='full-width'>
+                            <mat-label>Fecha Final</mat-label>
+                            <input matInput [matDatepicker]='picker2' formControlName='endDate' placeholder='YYYY/MM/dd'
+                                   [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
+                                   (input)='handleFindAvailableDates($event)'
+                                   (keyup)='handleFindAvailableDates($event)'>
+                            <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]='picker2'></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </span>
+                    <span class="col">
+                        <button mat-raised-button (click)='filterData()'>Filtrar</button>
+                    </span>
+                </form>
+            </section>
+        </div>
+        <div class="row ful-width my-5 px-2">
+            <canvas id='expensesChart' #expensesChart class="my-5"></canvas>
+        </div>
+    </div>
+    <!-- Proporcion en tipo de deudas -->
+    <div class="dark-theme full-width">
+        <div class="col full-width">
+            <canvas id='debtChart' #debtChart class="my-5"></canvas>
+        </div>
+    </div>
 </div>
