@@ -171,6 +171,38 @@ export class ScoreReportComponent implements AfterViewInit {
               }
             }
           });
+          this.debtChart?.destroy();
+          let doughnutData: ChartData<'doughnut'> = {
+            labels: [
+              'Deuda tributaria',
+              'Deuda bancaria',
+              'Deuda privada'
+            ],
+            datasets: [{
+              label: 'Deuda',
+              data: [this.contributor!.accumulatedDebt, 2500, 1000],
+              backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+              ],
+              hoverOffset: 4
+            }]
+          },
+            options: {
+              cutout: '80%',
+              radius: '100%',
+              rotation: 0,
+              circumference: 360,
+              doughnut: {
+
+              };
+            };
+          this.debtChart = new Chart(this.debtChartElementRef.nativeElement, {
+            type: 'doughnut',
+            data: doughnutData
+          });
+
           //Se limitan las fechas que se pueden seleccionar, desde el día actual
           const minYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[0].year, 1, 1).getFullYear();
           const minMonth: number = new Date(<Date>this.contributor?.impositionHistoricalRecord[0].paymentDate).getMonth();
