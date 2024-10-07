@@ -17,16 +17,6 @@ $credit-score-portal-theme: mat.define-theme((
 
 html, body { 
     height: 100%;
-}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.dark-theme {
-    background-color: #242c2c;
-    color: #FFFFFF;
-}
-
-html {
-
     @include mat.all-component-themes($credit-score-portal-theme); 
     @include mat.button-theme($credit-score-portal-theme);
     @include mat.button-toggle-theme($credit-score-portal-theme);
@@ -53,9 +43,12 @@ html {
     @include mat.option-theme($credit-score-portal-theme);
     @include mat.dialog-theme($credit-score-portal-theme);
     @include mat.badge-theme($credit-score-portal-theme);
-    @include mat.tabs-theme($credit-score-portal-theme);
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-    //@include mat.hint-theme($credit-score-portal-theme);
+.dark-theme {
+    background-color: #242c2c;
+    color: #FFFFFF;
 }
 
 .row {
