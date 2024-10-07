@@ -22,8 +22,13 @@ export class ContributorService {
           'credit-score-api-01': environment.apiManagementCredentials.creditScoreKey
         },
         params: {
-          'nit': '87654321'
+          'cui': '1234567890123'
+          //'nit': '12345678'
         }
+        /* params: {
+          'cui': '9876543210987',
+          'nit': '87654321'
+        } */
       });
   }
 }
