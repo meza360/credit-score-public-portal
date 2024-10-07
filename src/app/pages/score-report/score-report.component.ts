@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { CategoryScale, Chart, LinearScale, LineController, LineElement, PointElement, Filler, LegendElement, Legend, ChartData, ChartType, DoughnutController, DoughnutControllerChartOptions, ArcElement } from 'chart.js';
-import { ContributorDto } from '../../core/models';
+import { ContributorDto, CreditScoreResponse, PrivateCustomerDto } from '../../core/models';
 import { ContributorService } from '../../core/services/contributor.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UtilService } from '../../core/services/util.service';
+import { EEGSAService } from '../../core/services/private/eegsa.service';
 
 @Component({
   selector: 'app-score-report',
@@ -34,10 +35,12 @@ export class ScoreReportComponent implements AfterViewInit {
   minDate: Date | string = new Date();
   maxDate: Date | string = new Date();
   contributor: ContributorDto | null = null;
+  eegsaCustomer: PrivateCustomerDto | null = null;
   expensesChart: Chart | null = null;
   debtChart: Chart | null = null;
   constructor (
     private contributorService: ContributorService,
+    private eegsaService: EEGSAService,
     private formBuilder: FormBuilder,
     private utilService: UtilService) {
 
@@ -80,7 +83,7 @@ export class ScoreReportComponent implements AfterViewInit {
       ],
       datasets: [{
         label: 'My First Dataset',
-        data: [300, 50, 100],
+        data: [1, 1, 1],
         backgroundColor: [
           'rgb(255, 99, 132)',
           'rgb(54, 162, 235)',
@@ -171,7 +174,7 @@ export class ScoreReportComponent implements AfterViewInit {
               }
             }
           });
-          this.debtChart?.destroy();
+          /* this.debtChart?.destroy();
           let doughnutData: ChartData<'doughnut'> = {
             labels: [
               'Deuda tributaria',
@@ -201,7 +204,7 @@ export class ScoreReportComponent implements AfterViewInit {
           this.debtChart = new Chart(this.debtChartElementRef.nativeElement, {
             type: 'doughnut',
             data: doughnutData
-          });
+          }); */
 
           //Se limitan las fechas que se pueden seleccionar, desde el día actual
           const minYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[0].year, 1, 1).getFullYear();
@@ -212,6 +215,51 @@ export class ScoreReportComponent implements AfterViewInit {
           this.minDate = new Date(minYear, minMonth);
           //La fecha maximas, es 6 meses despues del día actual
           this.maxDate = new Date(maxYear, 1, 1);
+        }
+      });
+
+    this.eegsaService.getCustomerData()
+      .subscribe({
+        next: (response: CreditScoreResponse): void => {
+          console.log("Datos de eegsa");
+          console.log(<PrivateCustomerDto>response.value);
+          this.eegsaCustomer = <PrivateCustomerDto>response.value;
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error(err);
+        },
+        complete: () => {
+          this.debtChart?.destroy();
+          let doughnutData: ChartData<'doughnut'> = {
+            labels: [
+              'Deuda tributaria',
+              'Deuda bancaria',
+              'Deuda privada'
+            ],
+            datasets: [{
+              label: 'Deuda',
+              data: [this.contributor!.accumulatedDebt, 10000, this.eegsaCustomer!.accumulatedDebt],
+              backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+              ],
+              hoverOffset: 4
+            }]
+          },
+            options: {
+              cutout: '80%',
+              radius: '100%',
+              rotation: 0,
+              circumference: 360,
+              doughnut: {
+
+              };
+            };
+          this.debtChart = new Chart(this.debtChartElementRef.nativeElement, {
+            type: 'doughnut',
+            data: doughnutData
+          });
         }
       });
   }

@@ -1,6 +1,9 @@
-import { ContributorDto } from "./Contributor";
+import {
+    ContributorDto,
+    PrivateCustomerDto
+} from "./index";
 
 export interface CreditScoreResponse {
     isSuccess: boolean;
-    value: ContributorDto;
+    value: ContributorDto | PrivateCustomerDto;
 }
