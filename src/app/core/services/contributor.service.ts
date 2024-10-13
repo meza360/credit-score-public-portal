@@ -19,7 +19,7 @@ export class ContributorService {
     return this.httpClient.get<CreditScoreResponse>(this.serviceBaseUrl + this.queryingPath + '/credit-score',
       {
         headers: {
-          'credit-score-api-01': environment.apiManagementCredentials.creditScoreKey
+          'credit-score-key': environment.apiManagementCredentials.creditScoreKey
         },
         params: {
           'cui': '1234567890123'
