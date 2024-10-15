@@ -1,21 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
-import { CreditScoreResponse, PrivateCustomerDto } from '../../models';
 import { map, Observable, tap } from 'rxjs';
-import { ChartData } from 'chart.js';
+import { BankCustomer, CreditScoreResponse } from '../../models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EEGSAService {
+export class BancoUnionService {
   private serviceBaseUrl: string = environment.apiUrl + environment.apiPrefix;
-  private queryingPath: string = '/v1/querying/eegsa/customer';
-  constructor (private httpClient: HttpClient) {
+  private queryingPath: string = '/v1/querying/banco-union/customers';
 
-  }
+  constructor (private httpClient: HttpClient) { }
 
-  public getCustomerData(cuiToQuery: string): Observable<PrivateCustomerDto | null> {
+  getCustomerData(cuiToQuery: string): Observable<BankCustomer | null> {
     return this.httpClient.get<CreditScoreResponse>(this.serviceBaseUrl + this.queryingPath + '/credit-score/report',
       {
         headers: {
@@ -24,19 +22,17 @@ export class EEGSAService {
         params: {
           'cui': cuiToQuery
           //'cui': '9876543210987'
-          //'nit': '12345678'
         }
       }
     )
       .pipe(
         tap(console.debug),
-        map<CreditScoreResponse, PrivateCustomerDto | null>((response: CreditScoreResponse): PrivateCustomerDto | null => {
+        map<CreditScoreResponse, BankCustomer | null>((response: CreditScoreResponse): BankCustomer | null => {
           if (!response.isSuccess) {
             return null;
           }
-          return <PrivateCustomerDto>response.value;
-        }
-        )
+          return <BankCustomer>response.value;
+        })
       );
   }
 }
