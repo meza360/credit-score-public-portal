@@ -31,6 +31,7 @@ const MY_DATE_FORMAT = {
 };
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
     imports: [
@@ -39,7 +40,8 @@ import { MatButtonModule } from "@angular/material/button";
         ReactiveFormsModule,
         FormsModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        MatProgressBarModule
     ],
     exports: [
         MatFormFieldModule,
@@ -47,7 +49,8 @@ import { MatButtonModule } from "@angular/material/button";
         ReactiveFormsModule,
         FormsModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        MatProgressBarModule
     ],
     providers: [
         {

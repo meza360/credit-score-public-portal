@@ -24,6 +24,8 @@ import { UtilService } from '../../core/services/util.service';
 import { EEGSAService } from '../../core/services/private/eegsa.service';
 import { BancoUnionService } from '../../core/services/bank/banco-union.service';
 import { ActivatedRoute, Params } from '@angular/router';
+import { LoadingDialogComponent } from '../../components/loading-dialog/loading-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-score-report',
@@ -57,12 +59,14 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
   currentCitizenCui: string | null = null;
   expensesChart: Chart | null = null;
   debtChart: Chart | null = null;
+  dialogref: MatDialogRef<LoadingDialogComponent> | null = null;
   constructor (
     private contributorService: ContributorService,
     private eegsaService: EEGSAService,
     private formBuilder: FormBuilder,
     private bancoUnionService: BancoUnionService,
     private route: ActivatedRoute,
+    private matDialog: MatDialog,
     private utilService: UtilService) {
 
     Chart.register(
@@ -76,6 +80,17 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
       Legend,
       Filler);
   }
+  openLoadingDialog(): void {
+    this.dialogref = this.matDialog.open(LoadingDialogComponent,
+      {
+        width: '70%',
+        data: "",
+        disableClose: true
+      });
+  }
+  closeLoadingDialog(): void {
+    this.dialogref?.close();
+  }
   ngOnInit(): void {
     this.route.params.subscribe({
       next: (params: Params): void => {
@@ -83,6 +98,7 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
         if (params['id'] != null) {
           this.currentCitizenCui = params['id'];
           // Si hay algun cui en la ruta, se buscan los datos de ese cliente
+          this.openLoadingDialog();
           this.retrieveScore();
         };
       }
@@ -235,6 +251,7 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
           error: (err: HttpErrorResponse): void => { },
           complete: (): void => {
             this.fillDoughnutData();
+            this.closeLoadingDialog();
           }
         });
   }
@@ -275,7 +292,7 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
       data: doughnutData
     });
   }
-  filterData() {
+  filterData(): void {
     const startDate = this.filterForm.get('startDate')?.value;
     const endDate = this.filterForm.get('endDate')?.value;
     if (startDate && endDate && this.contributor) {
@@ -316,6 +333,4 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
 
     }
   }
-
-
 }
