@@ -9,13 +9,15 @@ import { MaterialModule } from './material.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { LoadingDialogComponent } from './components/loading-dialog/loading-dialog.component';
+import { CreditLetterComponent } from './components/credit-letter/credit-letter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScoreReportComponent,
     NotFoundComponent,
-    LoadingDialogComponent
+    LoadingDialogComponent,
+    CreditLetterComponent
   ],
   imports: [
     BrowserModule,

@@ -16,7 +16,7 @@ import {
   DoughnutControllerChartOptions,
   ArcElement
 } from 'chart.js';
-import { BankCustomer, ContributorDto, CreditScoreResponse, PrivateCustomerDto } from '../../core/models';
+import { BankCustomer, ContributorDto, CreditScoreResponse, Entity, PrivateCustomerDto } from '../../core/models';
 import { ContributorService } from '../../core/services/contributor.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -26,6 +26,7 @@ import { BancoUnionService } from '../../core/services/bank/banco-union.service'
 import { ActivatedRoute, Params } from '@angular/router';
 import { LoadingDialogComponent } from '../../components/loading-dialog/loading-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EntityService } from '../../core/services/entity.service';
 
 @Component({
   selector: 'app-score-report',
@@ -59,6 +60,7 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
   currentCitizenCui: string | null = null;
   expensesChart: Chart | null = null;
   debtChart: Chart | null = null;
+  currentEntity: Entity | null = null;
   dialogref: MatDialogRef<LoadingDialogComponent> | null = null;
   constructor (
     private contributorService: ContributorService,
@@ -67,6 +69,7 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
     private bancoUnionService: BancoUnionService,
     private route: ActivatedRoute,
     private matDialog: MatDialog,
+    private entityService: EntityService,
     private utilService: UtilService) {
 
     Chart.register(
@@ -251,9 +254,27 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
           error: (err: HttpErrorResponse): void => { },
           complete: (): void => {
             this.fillDoughnutData();
-            this.closeLoadingDialog();
+            this.retrieveConsolidatedScoreStep4();
+            //this.closeLoadingDialog();
           }
         });
+  }
+
+  retrieveConsolidatedScoreStep4(): void {
+    this.entityService.getEntityReport(this.currentCitizenCui!)
+      .subscribe({
+        next: (response: Entity | null): void => {
+          console.log("Datos consolidados: ", response);
+          if (!response) { return; }
+          this.currentEntity = response;
+        },
+        error: (err: HttpErrorResponse): void => {
+          console.error(err);
+        },
+        complete: (): void => {
+          this.closeLoadingDialog();
+        },
+      });
   }
   retrieveScore(): void {
     this.getContributorTributaryDataStep1();

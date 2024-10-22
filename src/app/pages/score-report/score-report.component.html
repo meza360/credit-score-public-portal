@@ -1,20 +1,27 @@
 <div class="container px-5 dark-theme">
     <div class="">
         <!-- First row -->
-        <div class="row full-width space-around dark-theme">
-            <div class=" col space-around justify-start full-width">
-                <span class="row justify-center">Datos del consultado </span>
+        <div class="row full-width space-around dark-theme my-5 py-5">
+            <div class="col align-center space-around full-width">
+                <span class="row justify-center fw-bold">Datos del ciudadano consultado</span>
+                @if (currentEntity) {
                 <span>
-                    <p>Nombre: Giovani David Meza Poggio</p>
-                    <p>CUI: 3342 22123 0101</p>
+                    <p>Nombre: {{currentEntity.fullName}} </p>
+                    <p>CUI: {{currentEntity.cui}}</p>
                     <p>Edad: 24 años</p>
-                    <p>Ocupacion: Estudiante</p>
-                    <p>Nacionalidad: Guatemalteco/Extranjero</p>
-                    <p>Estado civil: soltero</p>
+                    <!-- <p>Ocupacion: Estudiante</p> -->
+                    <p>Nacionalidad: {{currentEntity.nationality}}</p>
+                    <!-- <p>Estado civil: soltero</p> -->
                 </span>
+                }
+                @else {
+                <span>
+                    <p>No hay datos disponibles</p>
+                </span>
+                }
             </div>
-            <div class="col space-around justify-start full-width">
-                <span class="row justify-center">Guia de calificacion economica</span>
+            <div class="col align-center space-around full-width">
+                <span class="row justify-center fw-bold">Guia de calificacion economica</span>
                 <span>
                     <p>A: Menos de 1 mes de mora o al dia - riesgo normal</p>
                     <p>B: entre 30 y 60 dias de mora - riesgo superior al normal</p>
@@ -27,9 +34,27 @@
     </div>
     <!-- Second row -->
     <div>
-        <div class="row">
-            <div class="col">Calificacion de prestacion de servicios: A Tipo de incumplimiento: lorem</div>
-            <div class="col">Calificacion de prestamos/creditos bancarios: A Tipo de incumplimiento: lorem</div>
+        <div class="row full-width space-around dark-theme my-5 py-5">
+            @if (currentEntity) {
+            <div class="col align-center justify-start full-width">
+                <span class="fs-2 fw-bold">Calificacion de prestacion de servicios</span>
+                <span>Tipo de incumplimiento: lorem</span>
+                <span>
+                    <app-credit-letter [letter]="currentEntity.privateOverallScore"></app-credit-letter>
+                </span>
+            </div>
+            <div class="col align-center justify-start full-width">
+                <span class="fs-2 fw-bold">Calificacion de prestamos/creditos bancarios</span>
+                <span>Tipo de incumplimiento: lorem</span>
+                <span>
+                    <app-credit-letter [letter]="currentEntity.bankOverallScore"></app-credit-letter>
+                </span>
+
+            </div>
+            }
+            @else{
+            <span>No hay datos disponibles</span>
+            }
         </div>
     </div>
     <!-- Thrid row compras y declaraciones-->
@@ -38,9 +63,9 @@
             <h2 class="row justify-center">Flujo de dinero en escala de tiempo</h2>
             <section class="row full-width space-around">
                 <form [formGroup]="filterForm" class="row space-around align-center dark-theme full-width">
-                    <span class="col">
+                    <!--  <span class="col">
                         <button mat-raised-button (click)='retrieveScore()'>Retrieve score</button>
-                    </span>
+                    </span> -->
                     <span class="col">
                         <mat-form-field class='full-width dark-theme'>
                             <mat-label class="dark-theme">Fecha inicial</mat-label>
