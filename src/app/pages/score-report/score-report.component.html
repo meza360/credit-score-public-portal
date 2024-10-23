@@ -38,16 +38,24 @@
             @if (currentEntity) {
             <div class="col align-center justify-start full-width">
                 <span class="fs-2 fw-bold">Calificacion de prestacion de servicios</span>
-                <span>Tipo de incumplimiento: lorem</span>
+                <span>Tipo de incumplimiento: {{privateNoCompliance}}</span>
                 <span>
                     <app-credit-letter [letter]="currentEntity.privateOverallScore"></app-credit-letter>
                 </span>
             </div>
             <div class="col align-center justify-start full-width">
                 <span class="fs-2 fw-bold">Calificacion de prestamos/creditos bancarios</span>
-                <span>Tipo de incumplimiento: lorem</span>
+                <span>Tipo de incumplimiento: {{noCompliance}}</span>
                 <span>
                     <app-credit-letter [letter]="currentEntity.bankOverallScore"></app-credit-letter>
+                </span>
+
+            </div>
+            <div class="col align-center justify-start full-width">
+                <span class="fs-2 fw-bold">Calificacion de tributaria</span>
+                <span>Tipo de incumplimiento: {{tributaryNoCompliance}}</span>
+                <span>
+                    <app-credit-letter [letter]="currentEntity.taxOverallScore"></app-credit-letter>
                 </span>
 
             </div>

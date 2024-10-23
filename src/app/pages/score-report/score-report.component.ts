@@ -61,6 +61,9 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
   expensesChart: Chart | null = null;
   debtChart: Chart | null = null;
   currentEntity: Entity | null = null;
+  noCompliance: string = '';
+  tributaryNoCompliance: string = '';
+  privateNoCompliance: string = '';
   dialogref: MatDialogRef<LoadingDialogComponent> | null = null;
   constructor (
     private contributorService: ContributorService,
@@ -218,6 +221,8 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
           this.minDate = new Date(minYear, minMonth);
           //La fecha maximas, es 6 meses despues del día actual
           this.maxDate = new Date(maxYear, 1, 1);
+          let tributary = this.contributor?.statementHistoricalRecord.find((imposition) => imposition.wasDue);
+          this.tributaryNoCompliance = tributary?.wasDue ? 'Declaraciones vencidas' : 'Sin incumplimientos';
           this.getEEGSACustomerDataStep2();
         }
       });
@@ -237,6 +242,8 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
           console.error(err);
         },
         complete: (): void => {
+          let privateC = this.eegsaCustomer?.historicalRecord.find(bill => bill.wasDue);
+          this.privateNoCompliance = privateC?.wasDue ? 'Facturas vencidas' : 'Sin incumplimientos';
           this.getBankDebtDataStep3();
         }
       });
@@ -253,6 +260,9 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
           },
           error: (err: HttpErrorResponse): void => { },
           complete: (): void => {
+            let loan = this.bancoUnionCustomer?.loanHistoricalRecord.find((history) => history.wasDue);
+            let credit = this.bancoUnionCustomer?.creditHistoricalRecord.find((history) => history.wasDue);
+            this.noCompliance = loan?.wasDue ? 'Cuotas de préstamo' : credit?.wasDue ? 'Cuotas de tarjeta de crédito' : credit?.wasDue && loan?.wasDue ? 'Incumplimiento de pagos de prestamos y creditos' : 'Sin incumplimientos';
             this.fillDoughnutData();
             this.retrieveConsolidatedScoreStep4();
             //this.closeLoadingDialog();

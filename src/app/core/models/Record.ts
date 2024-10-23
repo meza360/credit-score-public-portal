@@ -6,4 +6,5 @@ export interface HistoricalRecordDto {
     daysDue?: number;
     amount?: number;
     total?: number;
+    type: string;
 }
