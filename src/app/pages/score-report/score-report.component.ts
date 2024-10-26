@@ -120,14 +120,10 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
     this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
       type: 'line',
       data: {
-        labels: [],
+        labels: ['El cliente no tiene datos de facturas o declaraciones juradas'],
         datasets: [
           {
-            label: 'Facturacion mensual(compras)',
-            data: []
-          },
-          {
-            label: 'Declaraciones mensuales(ventas)',
+            label: 'No hay datos tributarios para mostrar',
             data: []
           }
         ]
@@ -135,31 +131,22 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
       options: {
         plugins: {
           legend: {
-            display: true,
-            labels: {
-              //color: 'rgb(218, 60, 58)'
-            }
+            display: true
           }
         }
       }
     });
-
-
   }
   initializeDebtChart(): void {
     let datas: ChartData<'doughnut'> = {
       labels: [
-        'Red',
-        'Blue',
-        'Yellow'
+        'Deuda acumulada'
       ],
       datasets: [{
-        label: 'My First Dataset',
-        data: [1, 1, 1],
+        label: 'Datos',
+        data: [1],
         backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)'
+          '#930011'
         ],
         hoverOffset: 4
       }]
@@ -196,27 +183,31 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
         },
         complete: (): void => {
           this.expensesChart?.destroy();
-          this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
-            type: 'line',
-            data: <ChartData>data,
-            options: {
-              plugins: {
-                legend: {
-                  display: true,
-                  labels: {
-                    //color: 'rgb(218, 60, 58)'
+          if (data) {
+            this.expensesChart = new Chart(this.expensesChartElementRef.nativeElement, {
+              type: 'line',
+              data: <ChartData>data,
+              options: {
+                plugins: {
+                  legend: {
+                    display: true,
+                    labels: {
+                      color: 'rgb(255, 218, 214)'
+                    }
                   }
                 }
               }
-            }
-          });
-
+            });
+          }
+          else {
+            this.initializeExpensesChart();
+          }
 
           //Se limitan las fechas que se pueden seleccionar, desde el día actual
-          const minYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[0].year, 1, 1).getFullYear();
-          const minMonth: number = new Date(<Date>this.contributor?.impositionHistoricalRecord[0].paymentDate).getMonth();
+          const minYear: number = this.contributor!.impositionHistoricalRecord.length > 0 ? new Date(<number>this.contributor?.impositionHistoricalRecord[0].year, 1, 1).getFullYear() : new Date().getFullYear();
+          const minMonth: number = this.contributor!.impositionHistoricalRecord.length > 0 ? new Date(<Date>this.contributor?.impositionHistoricalRecord[0].paymentDate).getMonth() : new Date().getMonth();
           const currentDay: number = new Date().getDate();
-          const maxYear: number = new Date(<number>this.contributor?.impositionHistoricalRecord[this.contributor?.impositionHistoricalRecord.length - 1].year, 1, 1).getFullYear();
+          const maxYear: number = this.contributor!.impositionHistoricalRecord.length > 0 ? new Date(<number>this.contributor?.impositionHistoricalRecord[this.contributor?.impositionHistoricalRecord.length - 1].year, 1, 1).getFullYear() : new Date().getFullYear();
           //La fecha minima, es un dia despues del día actual
           this.minDate = new Date(minYear, minMonth);
           //La fecha maximas, es 6 meses despues del día actual
@@ -302,9 +293,10 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
         label: 'Deuda',
         data: [this.contributor?.accumulatedDebt ?? 0, this.bancoUnionCustomer?.accumulatedDebt ?? 0, this.eegsaCustomer?.accumulatedDebt ?? 0],
         backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)'
+          '#930011',
+          '#DA3C3A',
+          '#F9B6B0',
+          '#F9B6B0'
         ],
         hoverOffset: 4
       }]
@@ -316,6 +308,11 @@ export class ScoreReportComponent implements OnInit, AfterViewInit {
         circumference: 360,
         doughnut: {
 
+        },
+        plugins: {
+          customCanvasBackgroundColor: {
+            //color: '#FF0000';
+          };
         };
       };
     this.debtChart = new Chart(this.debtChartElementRef.nativeElement, {

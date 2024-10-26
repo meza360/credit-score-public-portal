@@ -1,119 +1,124 @@
-<div class="container px-5 dark-theme">
-    <div class="">
-        <!-- First row -->
-        <div class="row full-width space-around dark-theme my-5 py-5">
-            <div class="col align-center space-around full-width">
-                <span class="row justify-center fw-bold">Datos del ciudadano consultado</span>
+<div class="container-lg dark-theme-primary-container col align-center">
+
+    <div class="container-md px-5 dark-theme-on-primary-container ">
+        <div class="col align-center">
+            <h1>Calificacion crediticia</h1>
+            <!-- First row -->
+            <div class="row full-width space-around my-5 py-5">
+                <div class="col align-center space-around full-width">
+                    <span class="row justify-center fw-bold">Datos del ciudadano consultado</span>
+                    @if (currentEntity) {
+                    <span>
+                        <p>Nombre: {{currentEntity.fullName}} </p>
+                        <p>CUI: {{currentEntity.cui}}</p>
+                        <p>Edad: 24 años</p>
+                        <!-- <p>Ocupacion: Estudiante</p> -->
+                        <p>Nacionalidad: {{currentEntity.nationality}}</p>
+                        <!-- <p>Estado civil: soltero</p> -->
+                    </span>
+                    }
+                    @else {
+                    <span>
+                        <p>No hay datos disponibles</p>
+                    </span>
+                    }
+                </div>
+                <div class="col align-center space-around full-width">
+                    <span class="row justify-center fw-bold">Guia de calificacion economica</span>
+                    <span>
+                        <p>A: Menos de 1 mes de mora o al dia - riesgo normal</p>
+                        <p>B: entre 30 y 60 dias de mora - riesgo superior al normal</p>
+                        <p>C: entre 60 y 120 dias de mora - riesgo de perdidas</p>
+                        <p>D: entre 120 y 180 dias de mora - riesgo de perdidas significativas</p>
+                        <p>E: mas de 180 dias de mora - incobrable</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- Second row -->
+        <div>
+            <div class="row full-width space-around my-5 py-5">
                 @if (currentEntity) {
-                <span>
-                    <p>Nombre: {{currentEntity.fullName}} </p>
-                    <p>CUI: {{currentEntity.cui}}</p>
-                    <p>Edad: 24 años</p>
-                    <!-- <p>Ocupacion: Estudiante</p> -->
-                    <p>Nacionalidad: {{currentEntity.nationality}}</p>
-                    <!-- <p>Estado civil: soltero</p> -->
-                </span>
+                <div class="col align-center space-around full-width">
+                    <span class="fs-2 fw-bold">Calificacion de prestacion de servicios</span>
+                    <span>Tipo de incumplimiento: {{privateNoCompliance}}</span>
+                    <span>
+                        <app-credit-letter [letter]="currentEntity.privateOverallScore"></app-credit-letter>
+                    </span>
+                </div>
+                <div class="col align-center space-around full-width">
+                    <span class="fs-2 fw-bold">Calificacion de prestamos/creditos bancarios</span>
+                    <span>Tipo de incumplimiento: {{noCompliance}}</span>
+                    <span>
+                        <app-credit-letter [letter]="currentEntity.bankOverallScore"></app-credit-letter>
+                    </span>
+
+                </div>
+                <div class="col align-center space-around full-width">
+                    <span class="fs-2 fw-bold">Calificacion de tributaria</span>
+                    <span>Tipo de incumplimiento: {{tributaryNoCompliance}}</span>
+                    <span>
+                        <app-credit-letter [letter]="currentEntity.taxOverallScore"></app-credit-letter>
+                    </span>
+                </div>
                 }
-                @else {
-                <span>
-                    <p>No hay datos disponibles</p>
-                </span>
+                @else{
+                <span class="fs-2 fw-bold">No hay datos disponibles</span>
                 }
-            </div>
-            <div class="col align-center space-around full-width">
-                <span class="row justify-center fw-bold">Guia de calificacion economica</span>
-                <span>
-                    <p>A: Menos de 1 mes de mora o al dia - riesgo normal</p>
-                    <p>B: entre 30 y 60 dias de mora - riesgo superior al normal</p>
-                    <p>C: entre 60 y 120 dias de mora - riesgo de perdidas</p>
-                    <p>D: entre 120 y 180 dias de mora - riesgo de perdidas significativas</p>
-                    <p>E: mas de 180 dias de mora - incobrable</p>
-                </span>
             </div>
         </div>
-    </div>
-    <!-- Second row -->
-    <div>
-        <div class="row full-width space-around dark-theme my-5 py-5">
-            @if (currentEntity) {
-            <div class="col align-center justify-start full-width">
-                <span class="fs-2 fw-bold">Calificacion de prestacion de servicios</span>
-                <span>Tipo de incumplimiento: {{privateNoCompliance}}</span>
-                <span>
-                    <app-credit-letter [letter]="currentEntity.privateOverallScore"></app-credit-letter>
-                </span>
-            </div>
-            <div class="col align-center justify-start full-width">
-                <span class="fs-2 fw-bold">Calificacion de prestamos/creditos bancarios</span>
-                <span>Tipo de incumplimiento: {{noCompliance}}</span>
-                <span>
-                    <app-credit-letter [letter]="currentEntity.bankOverallScore"></app-credit-letter>
-                </span>
-
-            </div>
-            <div class="col align-center justify-start full-width">
-                <span class="fs-2 fw-bold">Calificacion de tributaria</span>
-                <span>Tipo de incumplimiento: {{tributaryNoCompliance}}</span>
-                <span>
-                    <app-credit-letter [letter]="currentEntity.taxOverallScore"></app-credit-letter>
-                </span>
-
-            </div>
-            }
-            @else{
-            <span>No hay datos disponibles</span>
-            }
-        </div>
-    </div>
-    <!-- Thrid row compras y declaraciones-->
-    <div class="dark-theme full-width">
-        <div class="col full-width">
-            <h2 class="row justify-center">Flujo de dinero en escala de tiempo</h2>
-            <section class="row full-width space-around">
-                <form [formGroup]="filterForm" class="row space-around align-center dark-theme full-width">
-                    <!--  <span class="col">
+        <!-- Thrid row compras y declaraciones-->
+        <div class="dark-theme full-width">
+            <div class="col full-width">
+                <h2 class="row justify-center">Flujo de dinero en escala de tiempo</h2>
+                <section class="row full-width space-around">
+                    <form [formGroup]="filterForm" class="row space-around align-center dark-theme full-width">
+                        <!--  <span class="col">
                         <button mat-raised-button (click)='retrieveScore()'>Retrieve score</button>
                     </span> -->
-                    <span class="col">
-                        <mat-form-field class='full-width dark-theme'>
-                            <mat-label class="dark-theme">Fecha inicial</mat-label>
-                            <input matInput [matDatepicker]='picker1' formControlName='startDate'
-                                   placeholder='YYYY/MM/dd' [min]='minDate' [max]='maxDate'
-                                   (dateChange)='handleFindAvailableDates($event)'
-                                   (input)='handleFindAvailableDates($event)' (keyup)='handleFindAvailableDates($event)'
-                                   class="dark-theme">
-                            <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
-                            <mat-datepicker-toggle matSuffix [for]='picker1' class="dark-theme"></mat-datepicker-toggle>
-                            <mat-datepicker #picker1 class="dark-theme"></mat-datepicker>
-                        </mat-form-field>
-                    </span>
-                    <span class="col">
-                        <mat-form-field class='full-width'>
-                            <mat-label>Fecha Final</mat-label>
-                            <input matInput [matDatepicker]='picker2' formControlName='endDate' placeholder='YYYY/MM/dd'
-                                   [min]='minDate' [max]='maxDate' (dateChange)='handleFindAvailableDates($event)'
-                                   (input)='handleFindAvailableDates($event)'
-                                   (keyup)='handleFindAvailableDates($event)'>
-                            <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
-                            <mat-datepicker-toggle matSuffix [for]='picker2'></mat-datepicker-toggle>
-                            <mat-datepicker #picker2></mat-datepicker>
-                        </mat-form-field>
-                    </span>
-                    <span class="col">
-                        <button mat-raised-button (click)='filterData()'>Filtrar</button>
-                    </span>
-                </form>
-            </section>
+                        <span class="col">
+                            <mat-form-field class='full-width dark-theme'>
+                                <mat-label class="dark-theme">Fecha inicial</mat-label>
+                                <input matInput [matDatepicker]='picker1' formControlName='startDate'
+                                       placeholder='YYYY/MM/dd' [min]='minDate' [max]='maxDate'
+                                       (dateChange)='handleFindAvailableDates($event)'
+                                       (input)='handleFindAvailableDates($event)'
+                                       (keyup)='handleFindAvailableDates($event)' class="dark-theme">
+                                <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]='picker1'
+                                                       class="dark-theme"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1 class="dark-theme"></mat-datepicker>
+                            </mat-form-field>
+                        </span>
+                        <span class="col">
+                            <mat-form-field class='full-width'>
+                                <mat-label>Fecha Final</mat-label>
+                                <input matInput [matDatepicker]='picker2' formControlName='endDate'
+                                       placeholder='YYYY/MM/dd' [min]='minDate' [max]='maxDate'
+                                       (dateChange)='handleFindAvailableDates($event)'
+                                       (input)='handleFindAvailableDates($event)'
+                                       (keyup)='handleFindAvailableDates($event)'>
+                                <mat-hint class="text-white">YYYY/MM/DD</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]='picker2'></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </span>
+                        <span class="col">
+                            <button mat-raised-button (click)='filterData()' color="primary">Filtrar</button>
+                        </span>
+                    </form>
+                </section>
+            </div>
+            <div class="row ful-width my-5 px-2">
+                <canvas id='expensesChart' #expensesChart class="my-5 dark-theme-on-primary-container"></canvas>
+            </div>
         </div>
-        <div class="row ful-width my-5 px-2">
-            <canvas id='expensesChart' #expensesChart class="my-5"></canvas>
-        </div>
-    </div>
-    <!-- Proporcion en tipo de deudas -->
-    <div class="row full-width my-5 px-2 justify-center">
-        <div class="col width-60">
-            <h2 class="row justify-center">Proporcion de endeudamientos</h2>
-            <canvas id='debtChart' #debtChart class="my-5"></canvas>
+        <!-- Proporcion en tipo de deudas -->
+        <div class="row full-width my-5 px-2 justify-center">
+            <div class="col width-60">
+                <h2 class="row justify-center">Proporcion de endeudamientos</h2>
+                <canvas id='debtChart' #debtChart class="my-5"></canvas>
+            </div>
         </div>
     </div>
 </div>
