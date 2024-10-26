@@ -3,7 +3,7 @@ import { environment } from '../../../environment/environment';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ContributorDto, CreditScoreResponse } from '../models';
 import { map, Observable, tap } from 'rxjs';
-import { ChartData } from 'chart.js';
+import { ChartData, ChartDataset } from 'chart.js';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,7 @@ export class ContributorService {
           let impositionHistoricalPaymentData: Array<number> = [];
           let statementHistoricalData: Array<string> = [];
           let statementHistoricalPaymentData: Array<number> = [];
+          let dataSets: ChartDataset<'line', number[]>[] = [];
           if (Array.isArray((<ContributorDto>response.value).impositionHistoricalRecord) && (<ContributorDto>response.value).impositionHistoricalRecord.length > 0) {
             impositionHistoricalData = (<ContributorDto>response.value).impositionHistoricalRecord
               .map((imposition) => {
@@ -45,8 +46,23 @@ export class ContributorService {
               .map((imposition) => {
                 return imposition.paymentAmount;
               });
+
+            dataSets.push({
+              label: 'Facturacion mensual(compras)',
+              data: impositionHistoricalPaymentData,
+              xAxisID: 'Fechas de compra',
+              yAxisID: 'Monto de compra',
+              fill: {
+                target: 'origin',
+                above: 'rgb(75,192,192,0.25)',   // Area will be blue above the origin
+                below: 'rgb(75, 192, 192)'    // And blue below the origin
+              },
+              borderColor: 'rgb(75, 192, 192)',
+              borderJoinStyle: 'bevel',
+              tension: 0.1
+            });
           }
-          if (Array.isArray((<ContributorDto>response.value).impositionHistoricalRecord) && (<ContributorDto>response.value).impositionHistoricalRecord.length > 0) {
+          if (Array.isArray((<ContributorDto>response.value).statementHistoricalRecord) && (<ContributorDto>response.value).statementHistoricalRecord.length > 0) {
             statementHistoricalData = (<ContributorDto>response.value).statementHistoricalRecord
               .map((statement) => {
                 return new Date(statement.year, statement.month).toISOString().split("T")[0];
@@ -55,33 +71,29 @@ export class ContributorService {
               .map((statement) => {
                 return statement.statementAmount;
               });
+
+            dataSets.push({
+              label: 'Declaraciones mensuales(ventas)',
+              data: statementHistoricalPaymentData,
+              xAxisID: 'Fechas de venta',
+              yAxisID: 'Monto de venta',
+              fill: {
+                target: 'origin',
+                above: 'rgb(218, 60, 58,0.25)',   // Area will be blue above the origin
+                below: 'rgb(75, 192, 192)'    // And blue below the origin
+              },
+              borderColor: 'rgb(218, 60, 58)',
+              borderJoinStyle: 'bevel',
+              tension: 0.1
+            });
+          }
+
+          if (dataSets.length == 0) {
+            return { chartData: null, contributor: <ContributorDto>response.value };
           }
           data = {
-            labels: impositionHistoricalData,
-            datasets: [
-              {
-                label: 'Facturacion mensual(compras)',
-                data: impositionHistoricalPaymentData,
-                fill: {
-                  target: 'origin',
-                  above: 'rgb(75,192,192,0.25)',   // Area will be blue above the origin
-                  below: 'rgb(75, 192, 192)'    // And blue below the origin
-                },
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-              },
-              {
-                label: 'Declaraciones mensuales(ventas)',
-                data: statementHistoricalPaymentData,
-                fill: {
-                  target: 'origin',
-                  above: 'rgb(218, 60, 58,0.25)',   // Area will be blue above the origin
-                  below: 'rgb(75, 192, 192)'    // And blue below the origin
-                },
-                borderColor: 'rgb(218, 60, 58)',
-                tension: 0.1
-              }
-            ]
+            labels: impositionHistoricalData.length > 0 ? impositionHistoricalData : statementHistoricalData.length > 0 ? statementHistoricalData : [],
+            datasets: dataSets
           };
           return { chartData: data, contributor: <ContributorDto>response.value };
         })
