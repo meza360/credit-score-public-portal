@@ -19,9 +19,6 @@ export class ContributorService {
   public queryContributorReport(cuiToQuery: string): Observable<{ chartData: ChartData<'line'> | null, contributor: ContributorDto; } | null> {
     return this.httpClient.get<CreditScoreResponse>(this.serviceBaseUrl + this.queryingPath + '/credit-score/report',
       {
-        headers: {
-          'credit-score-key': environment.apiManagementCredentials.creditScoreKey
-        },
         params: {
           'cui': cuiToQuery
           //'cui': '9876543210987'

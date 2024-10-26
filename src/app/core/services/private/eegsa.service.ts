@@ -18,9 +18,6 @@ export class EEGSAService {
   public getCustomerData(cuiToQuery: string): Observable<PrivateCustomerDto | null> {
     return this.httpClient.get<CreditScoreResponse>(this.serviceBaseUrl + this.queryingPath + '/credit-score/report',
       {
-        headers: {
-          'credit-score-key': environment.apiManagementCredentials.creditScoreKey
-        },
         params: {
           'cui': cuiToQuery
           //'cui': '9876543210987'
