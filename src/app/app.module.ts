@@ -7,11 +7,17 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { ScoreReportComponent } from './pages/score-report/score-report.component';
 import { MaterialModule } from './material.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { LoadingDialogComponent } from './components/loading-dialog/loading-dialog.component';
+import { CreditLetterComponent } from './components/credit-letter/credit-letter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ScoreReportComponent
+    ScoreReportComponent,
+    NotFoundComponent,
+    LoadingDialogComponent,
+    CreditLetterComponent
   ],
   imports: [
     BrowserModule,
