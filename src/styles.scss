@@ -1,56 +1,26 @@
-@use '@angular/material' as mat;
-@include mat.core();
-
-$credit-score-portal-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$cyan-palette
-  ),
-  typography: (
-    brand-family: 'Roboto',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
-
-html, body { 
-    height: 100%;
-    @include mat.all-component-themes($credit-score-portal-theme); 
-    @include mat.button-theme($credit-score-portal-theme);
-    @include mat.button-toggle-theme($credit-score-portal-theme);
-    @include mat.input-theme($credit-score-portal-theme);
-    @include mat.checkbox-theme($credit-score-portal-theme);
-    @include mat.select-theme($credit-score-portal-theme);
-    @include mat.slider-theme($credit-score-portal-theme);
-    @include mat.progress-spinner-theme($credit-score-portal-theme);
-    @include mat.progress-bar-theme($credit-score-portal-theme);
-    @include mat.tabs-theme($credit-score-portal-theme);
-    @include mat.card-theme($credit-score-portal-theme);
-    @include mat.dialog-theme($credit-score-portal-theme);
-    @include mat.snack-bar-theme($credit-score-portal-theme);
-    @include mat.tooltip-theme($credit-score-portal-theme);
-    @include mat.form-field-theme($credit-score-portal-theme);
-    @include mat.icon-theme($credit-score-portal-theme);
-    @include mat.menu-theme($credit-score-portal-theme);
-    @include mat.list-theme($credit-score-portal-theme);
-    @include mat.sidenav-theme($credit-score-portal-theme);
-    @include mat.toolbar-theme($credit-score-portal-theme);
-    @include mat.table-theme($credit-score-portal-theme);
-    @include mat.grid-list-theme($credit-score-portal-theme);
-    @include mat.datepicker-theme($credit-score-portal-theme);
-    @include mat.option-theme($credit-score-portal-theme);
-    @include mat.dialog-theme($credit-score-portal-theme);
-    @include mat.badge-theme($credit-score-portal-theme);
-}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.dark-theme {
-    background-color: #242c2c;
-    color: #FFFFFF;
+.dark-theme-on-primary-container {
+    background-color: #571E1B;
+    color: #FFDAD6;
 }
 
+.dark-theme-primary-container {
+    background-color: #73332F;
+    color: #FFDAD6;
+}
+
+.dark-theme-secondary-container {
+    background-color: #5D3F3C;
+    color: #000000;
+}
+
+.container-md {
+    width: 80%;
+}
+.container-ls {
+    width: 100%;
+}
 .row {
     display: flex;
     flex-direction: row;
@@ -93,6 +63,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .text-white{
     color: #FFFFFF;
+}
+
+.text-primary {
+    color: #FFDAD6;
 }
 
 .full-width{
