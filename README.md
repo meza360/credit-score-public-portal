@@ -9,3 +9,7 @@
 ## Rutas
 
 /public/score/:cui
+
+## Portal web
+
+https://salmon-island-0f952d20f.5.azurestaticapps.net/#/
